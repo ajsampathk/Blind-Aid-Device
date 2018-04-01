@@ -31,7 +31,6 @@ void loop() {
       JsonObject& res = jsonBuffer.parseObject(response); //Parse Response
       if(res.success()){
          if(!debug)Serial.println("Conversion Succesful");
-         Serial.print("Main Module:");
          Serial.println(response);
        }
       else if(!debug)Serial.println("Conversion Failed");
