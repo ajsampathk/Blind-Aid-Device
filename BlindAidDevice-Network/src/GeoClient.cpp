@@ -39,9 +39,8 @@ class GeoClientHandler{
 
     void start()   {
       if(debug){
-      Serial.begin(115200);
-      Serial.println("Start");
-    }
+        Serial.println("Start");
+      }
       WiFi.mode(WIFI_STA);
       WiFi.disconnect();
       delay(100);

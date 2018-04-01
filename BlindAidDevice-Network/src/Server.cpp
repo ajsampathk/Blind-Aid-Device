@@ -25,7 +25,6 @@ void handleRoot() {
 void start() {
   delay(1000);
   if(debug){
-  Serial.begin(115200);
   Serial.println();
   Serial.print("Configuring access point...");
 }
