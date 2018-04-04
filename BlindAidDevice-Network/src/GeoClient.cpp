@@ -29,7 +29,7 @@ public:
       strcpy(_PASS,p_pass);
       key = API;
       if(debug){
-        Serial.println("---------Client--------------------------");
+        Serial.println("---------Access Point--------------------------");
         Serial.print("Client ssid: ");
         Serial.println(_SSID);
         Serial.print("Client password: ");

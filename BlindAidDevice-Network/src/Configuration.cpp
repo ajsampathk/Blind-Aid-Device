@@ -11,9 +11,9 @@ public:
   Configuration(bool d=false){
     debug = d;
   }
-  const char* ssid;
-  const char* password;
-  const char* devID;
+  const char* ssid = new char[60];
+  const char* password = new char[60];
+  const char* devID = new char [60];
 
   bool exists(){
     EEPROM.begin(2048);
