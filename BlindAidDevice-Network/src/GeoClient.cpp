@@ -4,7 +4,12 @@
 
 class GeoClientHandler{
 
-  public:
+private:
+  char* _SSID = new char[60];
+  char* _PASS = new char[60];
+  String key;
+
+public:
     struct location{
       double lat;
       double lng;
@@ -12,19 +17,26 @@ class GeoClientHandler{
     };
     typedef struct location location;
 
-    char* ssid;
-    char* pass;
-    String key;
-    int debug;
+    bool debug;
 
-    GeoClientHandler(int d=0){
+    GeoClientHandler(bool d = false){
       debug =d;
     }
 
-    void init(char* p_ssid,char* p_pass,String API){
-      ssid = p_ssid;
-      pass = p_pass;
+
+    bool init(const char* p_ssid,const char* p_pass,String API){
+      strcpy(_SSID,p_ssid);
+      strcpy(_PASS,p_pass);
       key = API;
+      if(debug){
+        Serial.println("---------Client--------------------------");
+        Serial.print("Client ssid: ");
+        Serial.println(_SSID);
+        Serial.print("Client password: ");
+        Serial.println(_PASS);
+        Serial.println("-----------------------------------");
+      }
+      return true;
     }
     //URI for Google GeoLocation API...
     const char* Host = "www.googleapis.com";
@@ -37,36 +49,44 @@ class GeoClientHandler{
     double longitude   = 0.0;
     double accuracy    = 0.0;
 
-    void start()   {
+    bool start()   {
       if(debug){
         Serial.println("Start");
       }
+      if(_SSID && _PASS){
       WiFi.mode(WIFI_STA);
       WiFi.disconnect();
-      delay(100);
       if(debug){
       Serial.println("Setup done");
-      Serial.print("Connecting to ");
+      Serial.println("Connecting to ");
+      Serial.print("SSID: ");
+      Serial.print(_SSID);
+      Serial.print(" with password: ");
+      Serial.println(_PASS);
     }
-      WiFi.begin(ssid, pass);
+      WiFi.begin(_SSID, _PASS);
+      delete [] _SSID;
+      delete [] _PASS;
 
       while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         if(debug)Serial.print(".");
       }
       if(debug)Serial.println(".");
-
+      return true;
+    }
+    else{
+      if(debug)Serial.println("Value Error");
+      return false;
+    }
 
     }
 
 
     String Locate() {
-      char bssid[6];
       String res;
       DynamicJsonBuffer jsonBuffer;
-      // if(debug)Serial.println("scan start");
       int n = WiFi.scanNetworks();
-      // if(debug)Serial.println("scan done");
       if (n == 0){
         if(debug)Serial.println("no networks found");
       }
