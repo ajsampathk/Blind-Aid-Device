@@ -4,8 +4,10 @@
 #define mode 14
 
 void postLocation(char location[300]);
+void SOS();
 bool debug = true;
 bool serverMode = false;
+volatile bool _SOS = false;
 double lat=0.0;
 double lng=0.0;
 double acc=0.0;
@@ -34,6 +36,7 @@ void setup() {
       server.start();
     }
     else{
+      attachInterrupt(digitalPinToInterrupt(mode),SOS,FALLING);
       if(configure.exists()){
         delay(5000);
         configure.load();
@@ -60,9 +63,11 @@ void loop() {
       if(res.success()){
          Serial.println("Location Retrival: Success");
          res["id"] = dev;
+         res["sos"] = _SOS;
          char loc[300];
          res.prettyPrintTo(loc,sizeof(loc));
          postLocation(loc);
+         if(_SOS)_SOS=false;
        }
       else Serial.println("Location Retrival: Fail");
     }
@@ -80,4 +85,9 @@ void postLocation(char location[300]){
   Serial.println(payload);
 
   http.end();
+}
+
+void SOS(){
+  _SOS = true;
+  Serial.println("SOS Called!");
 }

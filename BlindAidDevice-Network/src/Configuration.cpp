@@ -40,12 +40,12 @@ public:
     EEPROM.begin(2048);
     EEPROM.write(0,high);
     EEPROM.write(1,low);
-    EEPROM.write(2,0xFF);
     if(debug) Serial.println("Writing:");
     for(int i = 0; i<size; i++){
       EEPROM.write(i+10,conf[i]);
       if(debug) Serial.print((char)EEPROM.read(i+10));
     }
+    EEPROM.write(2,0xFF);
     if(debug) Serial.println();
     bool ret = EEPROM.commit();
     EEPROM.end();

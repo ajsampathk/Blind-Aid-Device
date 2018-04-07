@@ -11,7 +11,6 @@ public:
 const char *AP_ssid;
 const char *AP_password;
 String conf;
-bool updated = false;
 bool debug;
 
 ESP8266WebServer *server;
@@ -33,7 +32,7 @@ void putConfig(){
   if(res)
   server->send(200,"text/json","{success: true}");
   else
-  server->send(200,"text/json","{success: true}");
+  server->send(200,"text/json","{success: false}");
 }
 
 void getConfig(){
