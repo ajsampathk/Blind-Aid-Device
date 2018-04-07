@@ -12,7 +12,7 @@ double lat=0.0;
 double lng=0.0;
 double acc=0.0;
 
-String API  = "AIzaSyADb7jnMpGn507x-m32M2gIFbPFJu0KvPs";
+String API  = "API_KEY";
 String dev;
 
 serverHandler server(80,debug);
@@ -76,7 +76,7 @@ void loop() {
 void postLocation(char location[300]){
 
   HTTPClient http;
-  http.begin("http://ec2-18-188-137-2.us-east-2.compute.amazonaws.com/location/update");
+  http.begin("SERVER_URI");
   http.addHeader("Content-Type", "application/json");
 
   int httpCode = http.POST(location);
