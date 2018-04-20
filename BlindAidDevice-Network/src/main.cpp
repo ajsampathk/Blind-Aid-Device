@@ -3,7 +3,7 @@
 #include "GeoClient.cpp"
 #define mode 14
 
-void postLocation(char location[300]);
+bool postLocation(char location[300]);
 void SOS();
 bool debug = true;
 bool serverMode = false;
@@ -12,7 +12,7 @@ double lat=0.0;
 double lng=0.0;
 double acc=0.0;
 
-String API  = "API_KEY";
+String API  = "AIzaSyADb7jnMpGn507x-m32M2gIFbPFJu0KvPs";
 String dev;
 
 serverHandler server(80,debug);
@@ -66,17 +66,18 @@ void loop() {
          res["sos"] = _SOS;
          char loc[300];
          res.prettyPrintTo(loc,sizeof(loc));
-         postLocation(loc);
-         if(_SOS)_SOS=false;
+         Serial.println(loc);
+         bool sent = postLocation(loc);
+         if(_SOS && sent)_SOS=false;
        }
       else Serial.println("Location Retrival: Fail");
     }
 }
 
-void postLocation(char location[300]){
+bool postLocation(char location[300]){
 
   HTTPClient http;
-  http.begin("SERVER_URI");
+  http.begin("http://ec2-18-188-137-2.us-east-2.compute.amazonaws.com/location/update");
   http.addHeader("Content-Type", "application/json");
 
   int httpCode = http.POST(location);
@@ -85,6 +86,9 @@ void postLocation(char location[300]){
   Serial.println(payload);
 
   http.end();
+
+  if(httpCode == 200)return true;
+  return false;
 }
 
 void SOS(){
